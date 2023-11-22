@@ -1,20 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
 using OrderingFoodFinalTerm.DTO;
-//using OrderingFoodFinalTerm.DTO;
 
 namespace OrderingFoodFinalTerm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : Controller
+    public class CategoryController : Controller
     {
-        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public ProductController(IProductRepository productRepository)
+        public CategoryController(ICategoryRepository categoryRepository) 
         {
-            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
         }
 
         // Get All
@@ -24,7 +24,7 @@ namespace OrderingFoodFinalTerm.Controllers
             try
             {
 
-                return Ok(_productRepository.GetAll());
+                return Ok(_categoryRepository.GetAll());
             }
             catch
             {
@@ -38,7 +38,7 @@ namespace OrderingFoodFinalTerm.Controllers
         {
             try
             {
-                var data = _productRepository.GetById(id);
+                var data = _categoryRepository.GetById(id);
                 if (data != null)
                 {
                     return Ok(data);
@@ -53,32 +53,17 @@ namespace OrderingFoodFinalTerm.Controllers
 
         // update
         [HttpPut("{id}")]
-        public IActionResult Update(int id, ProductDTO product)
+        public IActionResult Update(int id, CategoryDTO category)
         {
-            if (id != product.Id)
+            if (id != category.Id)
             {
-                return BadRequest();
+                return BadRequest("Not Found!");
             }
             try
             {
-                _productRepository.Update(product);
-                return Ok("Update thành công");
+                _categoryRepository.Update(category);
+                return NoContent();
 
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        //Update status isActive
-        [HttpPut("updateStatus/{id}")]
-        public IActionResult UpdateIsActive(int id, int status)
-        {
-            try
-            {
-                _productRepository.UpdateIsActive(id, status);
-                return Ok();
             }
             catch
             {
@@ -92,7 +77,7 @@ namespace OrderingFoodFinalTerm.Controllers
         {
             try
             {
-                _productRepository.Delete(id);
+                _categoryRepository.Delete(id);
                 return Ok();
             }
             catch
@@ -103,19 +88,19 @@ namespace OrderingFoodFinalTerm.Controllers
 
         //Post
         [HttpPost]
-        public IActionResult Add(ProductDTO product)
+        public IActionResult Add(CategoryDTO category)
         {
             try
             {
-                var _product = _productRepository.GetAll()
-                    .Where(c => c.ProductName.Trim().ToUpper() == product.ProductName.Trim().ToUpper())
+                var _category = _categoryRepository.GetAll()
+                    .Where(c => c.CategoryName.Trim().ToUpper() == category.CategoryName.Trim().ToUpper())
                     .FirstOrDefault();
                 // SP tồn tại
-                if (_product != null)
+                if (_category != null)
                 {
-                    return BadRequest("Sản phẩm đã tồn tại");
+                    return BadRequest("Loại hàng đã tồn tại");
                 }
-                _productRepository.Add(product);
+                _categoryRepository.Add(category);
                 return Ok("Thêm thành công");
             }
             catch

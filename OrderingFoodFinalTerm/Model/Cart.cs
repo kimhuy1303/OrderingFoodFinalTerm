@@ -10,6 +10,6 @@ namespace OrderingFoodFinalTerm
 
         public User User { get; set; }
         public Guid UserId { get; set; }
-
+        public List<Product> Products { get; set;}
     }
 }
