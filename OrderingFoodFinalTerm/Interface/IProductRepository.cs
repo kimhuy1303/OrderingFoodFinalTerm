@@ -1,6 +1,8 @@
 ﻿
 
+using Microsoft.AspNetCore.Mvc;
 using OrderingFoodFinalTerm.DTO;
+
 
 namespace OrderingFoodFinalTerm.Interface
 {
@@ -11,12 +13,13 @@ namespace OrderingFoodFinalTerm.Interface
         // lấy data theo id
         Product GetById(int id);
         // thêm product
-        ProductDTO Add(ProductDTO product);
+        Product Add(ProductDTO product);
         // sửa product
         void Update(ProductDTO product);
         // xóa product theo id
         void Delete(int id);
 
         void UpdateIsActive(int id, int status);
+        string UploadFile(IFormFile file);
     }
 }

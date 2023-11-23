@@ -2,6 +2,7 @@
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
 using OrderingFoodFinalTerm.DTO;
+
 //using OrderingFoodFinalTerm.DTO;
 
 namespace OrderingFoodFinalTerm.Controllers
@@ -53,7 +54,7 @@ namespace OrderingFoodFinalTerm.Controllers
 
         // update
         [HttpPut("{id}")]
-        public IActionResult Update(int id, ProductDTO product)
+        public IActionResult Update(int id, [FromForm] ProductDTO product)
         {
             if (id != product.Id)
             {
@@ -103,7 +104,7 @@ namespace OrderingFoodFinalTerm.Controllers
 
         //Post
         [HttpPost]
-        public IActionResult Add(ProductDTO product)
+        public IActionResult Add([FromForm] ProductDTO product)
         {
             try
             {
@@ -123,5 +124,7 @@ namespace OrderingFoodFinalTerm.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.DTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OrderingFoodFinalTerm.Repository
 {
@@ -14,12 +15,14 @@ namespace OrderingFoodFinalTerm.Repository
             _context = context;
         }
         //Add
-        public ProductDTO Add(ProductDTO product)
+        public Product Add(ProductDTO product)
         {
+            var ImagePath = UploadFile(product.file);
+
             var _product = new Product
             {
                 ProductName = product.ProductName,
-                ImagePath = product.ImagePath,
+                ImagePath = ImagePath,
                 Price = product.Price,
                 Description = product.Description,
                 IsActive = product.IsActive,
@@ -27,16 +30,7 @@ namespace OrderingFoodFinalTerm.Repository
             };
             _context.Add(_product);
             _context.SaveChanges();
-            return new ProductDTO
-            {
-                Id = _product.Id,
-                ProductName = product.ProductName,
-                ImagePath = product.ImagePath,
-                Price = product.Price,
-                Description = product.Description,
-                IsActive = product.IsActive,
-                CategoryId = product.CategoryId,
-            };
+            return _product;
         }
 
 
@@ -68,15 +62,17 @@ namespace OrderingFoodFinalTerm.Repository
             return null;
         }
 
+
         // Update product
         public void Update(ProductDTO product)
         {
+            var ImagePath = UploadFile(product.file);
             var _product = _context.Products.SingleOrDefault(p => p.Id == product.Id);
             _product.ProductName = product.ProductName;
             _product.Price = product.Price;
             _product.Description = product.Description;
             _product.IsActive = product.IsActive;
-            _product.ImagePath = product.ImagePath;
+            _product.ImagePath = ImagePath;
             _product.CategoryId = product.CategoryId;
             _context.SaveChanges();
         }
@@ -87,6 +83,27 @@ namespace OrderingFoodFinalTerm.Repository
             product.IsActive = status;
             _context.SaveChanges();
             
+        }
+
+        public string UploadFile(IFormFile file)
+        {
+            string filename = "";
+            try 
+            {
+                FileInfo fileinfo = new FileInfo(file.FileName);
+                filename = file.FileName + "_" + DateTime.Now.Ticks.ToString() + fileinfo.Extension; 
+                var getFilePath = Common.GetFilePath(filename);
+                using (var  stream = new FileStream(getFilePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+                return filename;
+            }
+
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
         }
     }
 }
