@@ -10,8 +10,8 @@ namespace OrderingFoodFinalTerm.Repository
         {
             _context = context;
         }
-
-        public User GetUserById(Guid id)
+        
+        public User GetUserById(int id)
         {
             var user = _context.Users.FirstOrDefault(e => e.Id == id);
             return user;

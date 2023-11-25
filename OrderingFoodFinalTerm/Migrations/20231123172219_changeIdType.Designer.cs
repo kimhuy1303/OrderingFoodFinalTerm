@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderingFoodFinalTerm;
 
@@ -11,9 +12,10 @@ using OrderingFoodFinalTerm;
 namespace OrderingFoodFinalTerm.Migrations
 {
     [DbContext(typeof(MainDbContext))]
-    partial class MainDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231123172219_changeIdType")]
+    partial class changeIdType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,13 +65,7 @@ namespace OrderingFoodFinalTerm.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
 
                     b.ToTable("Carts");
                 });
@@ -103,6 +99,9 @@ namespace OrderingFoodFinalTerm.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("IsActive")
                         .HasColumnType("int");
@@ -147,12 +146,7 @@ namespace OrderingFoodFinalTerm.Migrations
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -243,17 +237,12 @@ namespace OrderingFoodFinalTerm.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
@@ -303,28 +292,6 @@ namespace OrderingFoodFinalTerm.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderingFoodFinalTerm.Cart", b =>
-                {
-                    b.HasOne("OrderingFoodFinalTerm.User", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("OrderingFoodFinalTerm.Cart", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OrderingFoodFinalTerm.Order", b =>
-                {
-                    b.HasOne("OrderingFoodFinalTerm.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OrderingFoodFinalTerm.Product", b =>
                 {
                     b.HasOne("OrderingFoodFinalTerm.Category", "Category")
@@ -334,17 +301,6 @@ namespace OrderingFoodFinalTerm.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("OrderingFoodFinalTerm.User", b =>
-                {
-                    b.HasOne("OrderingFoodFinalTerm.Role", "Role")
-                        .WithMany("Users")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("OrderProduct", b =>
@@ -365,19 +321,6 @@ namespace OrderingFoodFinalTerm.Migrations
             modelBuilder.Entity("OrderingFoodFinalTerm.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("OrderingFoodFinalTerm.Role", b =>
-                {
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("OrderingFoodFinalTerm.User", b =>
-                {
-                    b.Navigation("Cart")
-                        .IsRequired();
-
-                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

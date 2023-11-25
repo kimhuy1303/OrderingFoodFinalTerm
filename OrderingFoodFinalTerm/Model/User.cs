@@ -4,8 +4,9 @@ namespace OrderingFoodFinalTerm
 {
     public class User
     {
+        
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [MaxLength(50)]
@@ -26,5 +27,6 @@ namespace OrderingFoodFinalTerm
         public Role Role { get; set; }
         public Cart Cart { get; set; }
         public List<Order> Orders { get; set; }
+        
     }
 }
