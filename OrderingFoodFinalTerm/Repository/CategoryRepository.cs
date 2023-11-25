@@ -15,9 +15,9 @@ namespace OrderingFoodFinalTerm.Repository
         }
 
         //Add
-        public CategoryDTO Add(CategoryDTO category)
+        public Category Add(CategoryDTO category)
         {
-            var _category = new CategoryDTO
+            var _category = new Category
             {
                 CategoryName = category.CategoryName
             };

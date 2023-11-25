@@ -2,6 +2,7 @@
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
 using OrderingFoodFinalTerm.DTO;
+using Microsoft.Extensions.Hosting;
 
 //using OrderingFoodFinalTerm.DTO;
 
@@ -12,10 +13,12 @@ namespace OrderingFoodFinalTerm.Controllers
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ProductController(IProductRepository productRepository)
+        public ProductController(IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
         {
             _productRepository = productRepository;
+            this._hostEnvironment = webHostEnvironment;
         }
 
         // Get All
@@ -64,7 +67,6 @@ namespace OrderingFoodFinalTerm.Controllers
             {
                 _productRepository.Update(product);
                 return Ok("Update thành công");
-
             }
             catch
             {
@@ -125,6 +127,7 @@ namespace OrderingFoodFinalTerm.Controllers
             }
         }
 
+        
 
     }
 }

@@ -9,7 +9,7 @@ namespace OrderingFoodFinalTerm.Interface
         // lấy data theo id
         CategoryDTO GetById(int id);
         // thêm product
-        CategoryDTO Add(CategoryDTO category);
+        Category Add(CategoryDTO category);
         // sửa product
         void Update(CategoryDTO category);
         // xóa product theo id

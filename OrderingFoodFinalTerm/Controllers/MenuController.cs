@@ -23,7 +23,6 @@ namespace OrderingFoodFinalTerm.Controllers
         {
             try
             {
-
                 return Ok(_menuRepository.GetAll());
             }
             catch

@@ -53,17 +53,23 @@ namespace OrderingFoodFinalTerm.Controllers
 
         // update
         [HttpPut("{id}")]
-        public IActionResult Update(int id, CategoryDTO category)
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult Update(int id, [FromBody]CategoryDTO category)
         {
+            if(category == null)
+            {
+                return BadRequest(ModelState);
+            }
             if (id != category.Id)
             {
-                return BadRequest("Not Found!");
+                return BadRequest(ModelState);
             }
             try
             {
                 _categoryRepository.Update(category);
                 return NoContent();
-
             }
             catch
             {

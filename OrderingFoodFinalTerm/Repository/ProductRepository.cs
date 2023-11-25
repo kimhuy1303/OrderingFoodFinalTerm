@@ -39,6 +39,7 @@ namespace OrderingFoodFinalTerm.Repository
             var product = _context.Products.SingleOrDefault(p => p.Id == id);
             if(product != null)
             {
+                Common.DeleteImage(product.ImagePath);
                 _context.Remove(product);
                 _context.SaveChanges();
             }
@@ -47,7 +48,17 @@ namespace OrderingFoodFinalTerm.Repository
         // Get all product
         public ICollection<Product> GetAll()
         {
-            var products = _context.Products.Include(c => c.Category).ToList();
+            var products = _context.Products.Include(c => c.Category).Select(e => new Product()
+            {
+                Id = e.Id,
+                ProductName = e.ProductName,
+                Price = e.Price,
+                Description = e.Description,
+                Category = e.Category,
+                IsActive = e.IsActive,
+                CategoryId = e.CategoryId,
+                ImagePath = String.Format("http://localhost:5143/images/" + e.ImagePath)
+            }).ToList();
             return products;
         }
 
@@ -66,7 +77,9 @@ namespace OrderingFoodFinalTerm.Repository
         // Update product
         public void Update(ProductDTO product)
         {
+            
             var ImagePath = UploadFile(product.file);
+            
             var _product = _context.Products.SingleOrDefault(p => p.Id == product.Id);
             _product.ProductName = product.ProductName;
             _product.Price = product.Price;
@@ -91,8 +104,9 @@ namespace OrderingFoodFinalTerm.Repository
             try 
             {
                 FileInfo fileinfo = new FileInfo(file.FileName);
-                filename = file.FileName + "_" + DateTime.Now.Ticks.ToString() + fileinfo.Extension; 
+                filename = file.FileName; 
                 var getFilePath = Common.GetFilePath(filename);
+                
                 using (var  stream = new FileStream(getFilePath, FileMode.Create))
                 {
                     file.CopyTo(stream);
@@ -105,5 +119,7 @@ namespace OrderingFoodFinalTerm.Repository
                 throw ex;
             }
         }
+
+
     }
 }
