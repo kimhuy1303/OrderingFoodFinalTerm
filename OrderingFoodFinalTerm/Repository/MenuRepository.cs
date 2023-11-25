@@ -19,7 +19,6 @@ namespace OrderingFoodFinalTerm.Repository
             var _menu = new Menu
             {
                 Id = menu.Id,
-                ImagePath = menu.ImagePath,
                 MenuName = menu.MenuName,
                 MenuDescription = menu.MenuDescription,
                 IsActive = menu.IsActive
@@ -29,7 +28,6 @@ namespace OrderingFoodFinalTerm.Repository
             return new MenuDTO 
             { 
                 Id = menu.Id, 
-                ImagePath = menu.ImagePath, 
                 MenuName = menu.MenuName, 
                 MenuDescription = menu.MenuDescription ,
                 IsActive = menu.IsActive
@@ -75,7 +73,6 @@ namespace OrderingFoodFinalTerm.Repository
                 _menu.MenuName = menu.MenuName;
                 _menu.MenuDescription = menu.MenuDescription;
                 _menu.IsActive = menu.IsActive;
-                _menu.ImagePath = menu.ImagePath;
                 _context.SaveChanges();
             }
         }
@@ -85,7 +82,6 @@ namespace OrderingFoodFinalTerm.Repository
             var menu = _context.Menus.Where(c => c.Id == request.MenuId).Include(c => c.Products).FirstOrDefault();
             var product = _context.Products.Where(c => c.Id == request.ProductId).FirstOrDefault();
             // .Product là tham chiếu đến Products mới thêm product được
-
             menu.Products.Add(product);
             _context.SaveChanges();
             return menu;

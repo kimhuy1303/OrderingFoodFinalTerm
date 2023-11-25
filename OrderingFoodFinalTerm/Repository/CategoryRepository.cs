@@ -17,13 +17,16 @@ namespace OrderingFoodFinalTerm.Repository
         //Add
         public CategoryDTO Add(CategoryDTO category)
         {
-            var _category = new CategoryDTO
+            var _category = new Category
             {
                 CategoryName = category.CategoryName
             };
             _context.Add(_category);
             _context.SaveChanges();
-            return _category;
+            return new CategoryDTO
+            {
+                CategoryName = category.CategoryName
+            };
         }
 
         // Delete
