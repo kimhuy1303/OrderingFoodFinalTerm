@@ -12,7 +12,7 @@ namespace OrderingFoodFinalTerm
         [MaxLength(50)]
         public string Username { get; set; }
         [Required]
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string Password { get; set; }
         [MaxLength(50)]
         public string? Firstname { get; set; }

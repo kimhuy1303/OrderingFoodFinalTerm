@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
 using OrderingFoodFinalTerm.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OrderingFoodFinalTerm.Controllers
 {
@@ -52,7 +53,7 @@ namespace OrderingFoodFinalTerm.Controllers
         }
 
         // update
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Admin")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]

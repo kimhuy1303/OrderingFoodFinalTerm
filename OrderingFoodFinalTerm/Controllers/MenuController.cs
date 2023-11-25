@@ -64,7 +64,7 @@ namespace OrderingFoodFinalTerm.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         public IActionResult Add(MenuDTO menu)
         {
             try 
@@ -79,7 +79,7 @@ namespace OrderingFoodFinalTerm.Controllers
             }
         }
 
-        [HttpPost("product")]
+        [HttpPost("Product")]
         public IActionResult AddProduct(MenuProductDTO request)
         {
             try
