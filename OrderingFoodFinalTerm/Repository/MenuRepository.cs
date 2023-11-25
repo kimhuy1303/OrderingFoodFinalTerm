@@ -49,7 +49,7 @@ namespace OrderingFoodFinalTerm.Repository
         // Get By Id
         public Menu GetById(int id)
         {
-            var menu = _context.Menus.Include(p => p.Products).SingleOrDefault(m => m.Id == id);
+            var menu = _context.Menus.Include(p => p.Products).ThenInclude(c => c.Category).SingleOrDefault(m => m.Id == id);
             if ( menu != null)
             {
                 return menu;
@@ -61,7 +61,8 @@ namespace OrderingFoodFinalTerm.Repository
         // Get all
         public ICollection<Menu> GetAll()
         {
-            var menus = _context.Menus.Include(p => p.Products).ToList();
+            var menus = _context.Menus.Include(p => p.Products).ThenInclude(c => c.Category).ToList();
+
             return menus;
         }
 
@@ -79,7 +80,7 @@ namespace OrderingFoodFinalTerm.Repository
 
         public Menu AddProduct(MenuProductDTO request)
         {
-            var menu = _context.Menus.Where(c => c.Id == request.MenuId).Include(c => c.Products).FirstOrDefault();
+            var menu = _context.Menus.Where(c => c.Id == request.MenuId).Include(c => c.Products).ThenInclude(c => c.Category).FirstOrDefault();
             var product = _context.Products.Where(c => c.Id == request.ProductId).FirstOrDefault();
             // .Product là tham chiếu đến Products mới thêm product được
             menu.Products.Add(product);

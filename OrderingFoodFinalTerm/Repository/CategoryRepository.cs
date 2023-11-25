@@ -23,7 +23,7 @@ namespace OrderingFoodFinalTerm.Repository
             };
             _context.Add(_category);
             _context.SaveChanges();
-            return new CategoryDTO
+            return new Category
             {
                 CategoryName = category.CategoryName
             };
