@@ -76,5 +76,21 @@ namespace OrderingFoodFinalTerm.Repository
             return jwt;
         }
 
+        ICollection<User> IUserRepository.GetAll()
+        {
+            var users = _context.Users.Include(c => c.Orders).Select(e => new User()
+            {
+                Username = e.Username,
+                Id = e.Id,
+                Address = e.Address,
+                Firstname = e.Firstname,
+                Lastname = e.Lastname,
+                Phonenumber = e.Phonenumber,
+                Password = e.Password,
+                RoleId  = e.RoleId,
+
+            }).ToList();
+            return users;
+        }
     }
 }

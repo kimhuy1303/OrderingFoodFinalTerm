@@ -2,6 +2,7 @@
 {
     public interface IUserRepository
     {
+        ICollection <User> GetAll();
         User GetUserById(int id);
 
         User GetUserByName(string name);
