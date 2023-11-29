@@ -21,5 +21,6 @@ namespace OrderingFoodFinalTerm.Interface
 
         void UpdateIsActive(int id, int status);
         string UploadFile(IFormFile file);
+        public List<Product> Search(string key);
     }
 }

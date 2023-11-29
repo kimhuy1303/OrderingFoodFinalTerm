@@ -107,5 +107,17 @@ namespace OrderingFoodFinalTerm.Repository
             _context.SaveChanges();
             return menu;
         }
+
+        public List<Menu> Search(string key)
+        {
+            var menus = _context.Menus.AsQueryable();
+            if (key != null)
+            {
+                menus = menus.Where(c => c.MenuName.Contains(key));
+
+            }
+            return menus.ToList();
+
+        }
     }
 }

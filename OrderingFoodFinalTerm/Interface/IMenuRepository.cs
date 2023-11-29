@@ -12,5 +12,6 @@ namespace OrderingFoodFinalTerm.Interface
         Menu AddProduct(MenuProductDTO request);
         Menu RemoveProduct(MenuProductDTO request);
         bool CheckExistMenu(int id);
+        public List<Menu> Search(string key);
     }
 }

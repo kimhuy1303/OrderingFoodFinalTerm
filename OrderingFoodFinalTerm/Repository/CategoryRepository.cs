@@ -2,6 +2,7 @@
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.DTO;
 using System.Net.WebSockets;
+using System.Xml.Linq;
 
 namespace OrderingFoodFinalTerm.Repository
 {
@@ -74,5 +75,21 @@ namespace OrderingFoodFinalTerm.Repository
 
             _context.SaveChanges();
         }
+
+        public List<Category> Search(string key)
+        {
+            var categories = _context.Categories.AsQueryable();
+            if (key != null)
+            {
+                categories = categories.Where(c =>c.CategoryName.Contains(key));
+
+            }
+            return categories.ToList();
+
+        }
+
+
+        
+
     }
 }

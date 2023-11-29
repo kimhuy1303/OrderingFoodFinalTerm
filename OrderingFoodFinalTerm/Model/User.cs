@@ -27,6 +27,6 @@ namespace OrderingFoodFinalTerm
         public Role Role { get; set; }
         public Cart Cart { get; set; }
         public List<Order> Orders { get; set; }
-        
+
     }
 }

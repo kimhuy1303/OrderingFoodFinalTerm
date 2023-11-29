@@ -15,6 +15,6 @@ namespace OrderingFoodFinalTerm
         public int UserId { get; set; }
         public int Status { get; set; } // 0: pending, 1: confirmed, 2: is delivering, 3: delivered, 4: cancled
         public User User { get; set; }
-        public List<Product> Products { get; set; }
+   
     }
 }

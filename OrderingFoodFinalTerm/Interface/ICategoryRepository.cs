@@ -14,5 +14,6 @@ namespace OrderingFoodFinalTerm.Interface
         void Update(CategoryDTO category);
         // xóa product theo id
         void Delete(int id);
+        public List<Category> Search(string key);
     }
 }

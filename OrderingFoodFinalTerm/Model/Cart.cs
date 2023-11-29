@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace OrderingFoodFinalTerm
 {
@@ -6,10 +7,11 @@ namespace OrderingFoodFinalTerm
     {
         [Key]
         public int Id { get; set; }
-        public int Quantity { get; set; }
-
         public int UserId { get; set; }
+        [JsonIgnore]
         public User User { get; set; }
-        public List<Product> Products { get; set;}
+        [JsonIgnore]
+
+        public List<CartItem> CartItems { get; set; }
     }
 }

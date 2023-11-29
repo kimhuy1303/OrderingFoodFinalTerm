@@ -64,7 +64,7 @@ namespace OrderingFoodFinalTerm.Controllers
             }
         }
 
-        [HttpPost("Add")]
+        [HttpPost]
         public IActionResult Add(MenuDTO menu)
         {
             try 
@@ -152,6 +152,20 @@ namespace OrderingFoodFinalTerm.Controllers
             catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError); 
+            }
+        }
+
+        [HttpGet("Search")]
+        public IActionResult Search(string? key)
+        {
+            try
+            {
+                var res = _menuRepository.Search(key);
+                return Ok(res);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

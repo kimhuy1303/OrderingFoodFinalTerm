@@ -22,21 +22,6 @@ namespace OrderingFoodFinalTerm.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("CartProduct", b =>
-                {
-                    b.Property<int>("CartsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartsId", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("CartProduct");
-                });
-
             modelBuilder.Entity("MenuProduct", b =>
                 {
                     b.Property<int>("MenusId")
@@ -60,9 +45,6 @@ namespace OrderingFoodFinalTerm.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -72,6 +54,35 @@ namespace OrderingFoodFinalTerm.Migrations
                         .IsUnique();
 
                     b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("OrderingFoodFinalTerm.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("OrderingFoodFinalTerm.Category", b =>
@@ -273,21 +284,6 @@ namespace OrderingFoodFinalTerm.Migrations
                     b.ToTable("OrderProduct");
                 });
 
-            modelBuilder.Entity("CartProduct", b =>
-                {
-                    b.HasOne("OrderingFoodFinalTerm.Cart", null)
-                        .WithMany()
-                        .HasForeignKey("CartsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OrderingFoodFinalTerm.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("MenuProduct", b =>
                 {
                     b.HasOne("OrderingFoodFinalTerm.Menu", null)
@@ -312,6 +308,25 @@ namespace OrderingFoodFinalTerm.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrderingFoodFinalTerm.CartItem", b =>
+                {
+                    b.HasOne("OrderingFoodFinalTerm.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("OrderingFoodFinalTerm.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("OrderingFoodFinalTerm.Order", b =>
@@ -360,6 +375,11 @@ namespace OrderingFoodFinalTerm.Migrations
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("OrderingFoodFinalTerm.Cart", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("OrderingFoodFinalTerm.Category", b =>

@@ -53,7 +53,7 @@ namespace OrderingFoodFinalTerm.Controllers
         }
 
         // update
-        [HttpPut("{id}"), Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
@@ -115,5 +115,20 @@ namespace OrderingFoodFinalTerm.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+        [HttpGet("Search")]
+        public IActionResult Search(string? key) 
+        {
+            try
+            {
+                var res = _categoryRepository.Search(key);
+                return Ok(res);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
     }
 }

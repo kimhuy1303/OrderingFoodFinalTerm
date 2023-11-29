@@ -127,7 +127,21 @@ namespace OrderingFoodFinalTerm.Controllers
             }
         }
 
-        
+        [HttpGet("Search")]
+        public IActionResult Search(string? key)
+        {
+            try
+            {
+                var res = _productRepository.Search(key);
+                return Ok(res);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
 
     }
 }

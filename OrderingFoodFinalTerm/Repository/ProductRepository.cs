@@ -120,6 +120,29 @@ namespace OrderingFoodFinalTerm.Repository
             }
         }
 
+        public List<Product> Search(string key)
+        {
+            var products = _context.Products.AsQueryable();
+            if (key != null)
+            {
+                products = products.Where(c => c.ProductName.Contains(key)).Include(c => c.Category);
+
+            }
+            var result = products.Select(e => new Product
+            {
+                Id = e.Id,
+                ProductName = e.ProductName,
+                Price = e.Price,
+                Description = e.Description,
+                Category = e.Category,
+                IsActive = e.IsActive,
+                CategoryId = e.CategoryId,
+                ImagePath = String.Format("http://localhost:5143/images/" + e.ImagePath)
+            });
+            return result.ToList();
+            
+
+        }
 
     }
 }
