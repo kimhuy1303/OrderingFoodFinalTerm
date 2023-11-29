@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CoreApiResponse;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderingFoodFinalTerm.DTO;
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
+using System.Net;
 
 namespace OrderingFoodFinalTerm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : BaseController
     {
         private readonly IUserRepository _userRepository;
         public UserController(IUserRepository userRepository)
@@ -22,14 +24,44 @@ namespace OrderingFoodFinalTerm.Controllers
             try
             {
 
-                return Ok(_userRepository.GetAll());
+                return CustomResult(_userRepository.GetAll(), HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetUser(int id)
+        {
+            try
+            {
+                var res = _userRepository.GetUserById(id);
+                if(res == null)
+                {
+                    return CustomResult(HttpStatusCode.NotFound);
+                }
+                return CustomResult(res,HttpStatusCode.OK);
+            }
+            catch
+            {
+                return CustomResult(HttpStatusCode.InternalServerError);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUserById(int id)
+        {
+            try
+            {
+                _userRepository.DeleteUser(id);
+                return CustomResult(HttpStatusCode.OK);
+            }catch
+            {
+                return CustomResult(HttpStatusCode.InternalServerError);
+            }
+        }
 
     }
 }

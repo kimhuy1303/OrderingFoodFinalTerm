@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CoreApiResponse;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderingFoodFinalTerm.DTO;
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
+using System.Net;
 
 namespace OrderingFoodFinalTerm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MenuController : Controller
+    public class MenuController : BaseController
     {
         private readonly IMenuRepository _menuRepository;
 
@@ -23,11 +25,11 @@ namespace OrderingFoodFinalTerm.Controllers
         {
             try
             {
-                return Ok(_menuRepository.GetAll());
+                return CustomResult(_menuRepository.GetAll(), HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -40,13 +42,13 @@ namespace OrderingFoodFinalTerm.Controllers
                 var data = _menuRepository.GetById(id);
                 if (data != null)
                 {
-                    return Ok(data);
+                    return CustomResult(data, HttpStatusCode.OK);
                 }
-                return NotFound();
+                return CustomResult(HttpStatusCode.NotFound);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
         //Delete
@@ -60,7 +62,7 @@ namespace OrderingFoodFinalTerm.Controllers
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -87,7 +89,7 @@ namespace OrderingFoodFinalTerm.Controllers
                 // Nếu không có menu id 
                 if (_menuRepository.CheckExistMenu(request.MenuId) == false)
                 {
-                    return NotFound("Id Menu không tìm thấy");
+                    return CustomResult("Id menu không tìm thấy", HttpStatusCode.NotFound);
                 }
                 // lấy id của menu mình tìm, tham chiếu đến list product trong menu,
                 // nếu id truyền vào = id product => true
@@ -95,16 +97,16 @@ namespace OrderingFoodFinalTerm.Controllers
                               .Products.Any(c => c.Id == request.ProductId);
                 if (product)
                 {
-                    return BadRequest("Sản phẩm này tồn tại");
+                    return CustomResult("Sản phẩm này đã tồn tại", HttpStatusCode.BadRequest);
                 }
 
                 _menuRepository.AddProduct(request);
 
-                return Ok();
+                return CustomResult("Thêm thành công",HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
 
             }
         }
@@ -117,7 +119,7 @@ namespace OrderingFoodFinalTerm.Controllers
                 // Nếu không có menu id 
                 if (_menuRepository.CheckExistMenu(request.MenuId) == false)
                 {
-                    return NotFound("Id Menu không tìm thấy");
+                    return CustomResult("Id menu không tìm thấy", HttpStatusCode.NotFound);
                 }
                 // lấy id của menu mình tìm, tham chiếu đến list product trong menu,                
                 // nếu id truyền vào = id product => true
@@ -126,13 +128,13 @@ namespace OrderingFoodFinalTerm.Controllers
                 if (product)
                 {
                     _menuRepository.RemoveProduct(request);
-                    return Ok("Xóa thành công");
+                    return CustomResult("Xóa thành công", HttpStatusCode.OK);
                 }
-                return BadRequest("Không tìm thấy sản phẩm");
+                return CustomResult("Không tìm thấy sản phẩm", HttpStatusCode.BadRequest);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -142,16 +144,16 @@ namespace OrderingFoodFinalTerm.Controllers
 
             if (id != menu.Id)
             {
-                return BadRequest("Không tìm thấy Id menu");
+                return CustomResult("Id menu không tìm thấy", HttpStatusCode.NotFound);
             }
             try
             {
                 _menuRepository.Update(menu);
-                return Ok("Update thành công");
+                return CustomResult("Update thành công", HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError); 
+                return CustomResult(HttpStatusCode.InternalServerError); 
             }
         }
 

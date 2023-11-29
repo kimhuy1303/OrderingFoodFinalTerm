@@ -4,12 +4,14 @@ using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
 using OrderingFoodFinalTerm.DTO;
 using Microsoft.AspNetCore.Authorization;
+using CoreApiResponse;
+using System.Net;
 
 namespace OrderingFoodFinalTerm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : Controller
+    public class CategoryController : BaseController
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -24,12 +26,11 @@ namespace OrderingFoodFinalTerm.Controllers
         {
             try
             {
-
-                return Ok(_categoryRepository.GetAll());
+                return CustomResult(_categoryRepository.GetAll(), HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -42,13 +43,13 @@ namespace OrderingFoodFinalTerm.Controllers
                 var data = _categoryRepository.GetById(id);
                 if (data != null)
                 {
-                    return Ok(data);
+                    return CustomResult(data, HttpStatusCode.OK);
                 }
-                return NotFound();
+                return CustomResult(HttpStatusCode.NotFound);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -61,20 +62,20 @@ namespace OrderingFoodFinalTerm.Controllers
         {
             if(category == null)
             {
-                return BadRequest(ModelState);
+                return CustomResult(ModelState,HttpStatusCode.BadRequest);
             }
             if (id != category.Id)
             {
-                return BadRequest(ModelState);
+                return CustomResult(ModelState,HttpStatusCode.BadRequest);
             }
             try
             {
                 _categoryRepository.Update(category);
-                return NoContent();
+                return CustomResult("Update thành công",HttpStatusCode.NoContent);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -85,11 +86,11 @@ namespace OrderingFoodFinalTerm.Controllers
             try
             {
                 _categoryRepository.Delete(id);
-                return Ok();
+                return CustomResult("Xóa thành công", HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -105,14 +106,14 @@ namespace OrderingFoodFinalTerm.Controllers
                 // SP tồn tại
                 if (_category != null)
                 {
-                    return BadRequest("Loại hàng đã tồn tại");
+                    return CustomResult("Loại hàng đã tồn tại", HttpStatusCode.BadRequest);
                 }
                 _categoryRepository.Add(category);
-                return Ok("Thêm thành công");
+                return CustomResult("Thêm thành công", HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 

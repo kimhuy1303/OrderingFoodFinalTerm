@@ -3,14 +3,15 @@ using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
 using OrderingFoodFinalTerm.DTO;
 using Microsoft.Extensions.Hosting;
-
+using CoreApiResponse;
+using System.Net;
 //using OrderingFoodFinalTerm.DTO;
 
 namespace OrderingFoodFinalTerm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : Controller
+    public class ProductController : BaseController
     {
         private readonly IProductRepository _productRepository;
         private readonly IWebHostEnvironment _hostEnvironment;
@@ -28,11 +29,11 @@ namespace OrderingFoodFinalTerm.Controllers
             try
             {
 
-                return Ok(_productRepository.GetAll());
+                return CustomResult(_productRepository.GetAll(), HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -45,13 +46,13 @@ namespace OrderingFoodFinalTerm.Controllers
                 var data = _productRepository.GetById(id);
                 if (data != null)
                 {
-                    return Ok(data);
+                    return CustomResult(data,HttpStatusCode.OK);
                 }
-                return NotFound();
+                return CustomResult(HttpStatusCode.NotFound);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -61,16 +62,16 @@ namespace OrderingFoodFinalTerm.Controllers
         {
             if (id != product.Id)
             {
-                return BadRequest();
+                return CustomResult(HttpStatusCode.BadRequest);
             }
             try
             {
                 _productRepository.Update(product);
-                return Ok("Update thành công");
+                return CustomResult("Update thành công",HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -81,11 +82,11 @@ namespace OrderingFoodFinalTerm.Controllers
             try
             {
                 _productRepository.UpdateIsActive(id, status);
-                return Ok();
+                return CustomResult(HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -96,11 +97,11 @@ namespace OrderingFoodFinalTerm.Controllers
             try
             {
                 _productRepository.Delete(id);
-                return Ok();
+                return CustomResult(HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
@@ -116,14 +117,14 @@ namespace OrderingFoodFinalTerm.Controllers
                 // SP tồn tại
                 if (_product != null)
                 {
-                    return BadRequest("Sản phẩm đã tồn tại");
+                    return CustomResult("Sản phẩm đã tồn tại",HttpStatusCode.BadRequest);
                 }
                 _productRepository.Add(product);
-                return Ok("Thêm thành công");
+                return CustomResult("Thêm thành công", HttpStatusCode.OK);
             }
             catch
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return CustomResult(HttpStatusCode.InternalServerError);
             }
         }
 
