@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using CoreApiResponse;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderingFoodFinalTerm.Interface;
+using System.Net;
 
 namespace OrderingFoodFinalTerm.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : BaseController
     {
         private readonly IUserRepository _userRepository;
         public AuthController(IUserRepository userRepository)
@@ -15,16 +17,16 @@ namespace OrderingFoodFinalTerm.Controllers
         }
 
         [HttpPost("Register")]
-        public ActionResult Register([FromBody] RegisterDTO request)
+        public IActionResult Register([FromBody] RegisterDTO request)
         {
             var checkExists = _userRepository.GetUserByName(request.Username);
             if(checkExists != null)
             {
-                return BadRequest("Tài khoản đã tồn tại");
+                return CustomResult("Tài khoản đã tồn tại", HttpStatusCode.BadRequest);
             }
             if(request.Password != request.ConfirmPassword)
             {
-                return BadRequest("Mật khẩu không trùng khớp");
+                return CustomResult("Mật khẩu không trùng khớp", HttpStatusCode.BadRequest);
             }
             var hashPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
             var newUser = new UserDTO
@@ -35,24 +37,24 @@ namespace OrderingFoodFinalTerm.Controllers
             var result = _userRepository.CreateUser(newUser);
             if (!result)
             {
-                return BadRequest("Tạo tài khoản không thành công");
+                return CustomResult("Tạo tài khoản không thành công", HttpStatusCode.BadRequest);
             }
             else
             {
-                return Ok("Tạo thành công");
+                return CustomResult("Tạo thành công", HttpStatusCode.OK);
             }
         }
 
         [HttpPost("Login")]
-        public ActionResult Login([FromBody] LoginDTO request)
+        public IActionResult Login([FromBody] LoginDTO request)
         {
             var _user = _userRepository.GetUserByName(request.Username);
             if(_user == null || !_userRepository.ValidatePassword(_user, request.Password))
             {
-                return BadRequest("Tài khoản hoặc mật khẩu không hợp lệ");
+                return CustomResult("Tài khoản hoặc mật khẩu không hợp lệ", HttpStatusCode.BadRequest);
             }
             var token = _userRepository.CreateToken(_user);
-            return Ok(new { Token = token });
+            return CustomResult(new {Token = token}, HttpStatusCode.OK);
         }
     }
 }

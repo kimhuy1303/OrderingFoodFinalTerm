@@ -13,5 +13,10 @@
 
         string CreateToken(User user);
 
+        void DeleteUser(int id);
+
+        //void ChangePassword(int id, string newPassword, string confirmPassword);
+
+
     }
 }

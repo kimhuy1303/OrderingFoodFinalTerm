@@ -92,5 +92,12 @@ namespace OrderingFoodFinalTerm.Repository
             }).ToList();
             return users;
         }
+
+        public void DeleteUser(int id)
+        {
+            var user = _context.Users.SingleOrDefault(c => c.Id == id);
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+        }
     }
 }
