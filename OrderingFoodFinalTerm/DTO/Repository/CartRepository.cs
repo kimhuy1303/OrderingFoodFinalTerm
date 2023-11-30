@@ -53,10 +53,10 @@ namespace OrderingFoodFinalTerm.Repository
         }
 
 
-        public void EditQuantityProduct(int cartProductId, int quantity)
+        public void EditQuantityProduct(int cartId, int cartProductId, int quantity)
         {
             // kiểm tra xem có productID cần tìm hay không
-            var cartItem = _context.CartItems.FirstOrDefault(c => c.ProductId == cartProductId);
+            var cartItem = _context.CartItems.FirstOrDefault(c => c.ProductId == cartProductId && c.CartId == cartId);
             if (cartItem != null)
             {
                 cartItem.Quantity = quantity;

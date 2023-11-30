@@ -67,34 +67,13 @@ namespace OrderingFoodFinalTerm.Controllers
             var cart = _cartRepository.getCartByUserId(userId);
             if (cart != null)
             {
-                _cartRepository.EditQuantityProduct(cartProductId, quantity);
+                _cartRepository.EditQuantityProduct(cart.Id,cartProductId, quantity);
                 return Ok("chỉnh số lượng thành công");
             }
             return BadRequest();
         }
 
-        [HttpPost("Checkout")]
-        public void CheckOut(int userId, OrderDTO order)
-        {
-            var cart = _cartRepository.getCartByUserId(userId);
-            if (cart != null && cart.CartItems.Any())
-            {
-                var _order = new Order
-                {
-                    UserId = userId,
-                    CreatedDate = DateTime.Now,
-                    CustomerAddress = order.CustomerAddress,
-                    CustomerName = order.CustomerName,
-                    CustomerPhone = order.CustomerPhone,
-                    TotalPrice = cart.CartItems.Sum(x => x.TotalPrice)
-                };
-              
-                _orderRepository.CreateOrder(_order);
-
-                _orderRepository.SaveChange();
-                _cartRepository.SaveChange();
-            }
-        }
+        
     }
 
 }

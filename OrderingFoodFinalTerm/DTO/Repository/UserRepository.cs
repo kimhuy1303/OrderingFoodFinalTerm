@@ -26,12 +26,13 @@ namespace OrderingFoodFinalTerm.Repository
             {
                 Username = request.Username,
                 Password = request.Password,
+                Phonenumber = request.Phonenumber,
                 CreatedDate = request.CreatedDate,
                 RoleId = request.RoleId,
             };
             _context.Add(_user);
             var res = _context.SaveChanges();
-            return res > 0 ;
+            return res > 0;
         }
 
         public User GetUserById(int id)
@@ -48,7 +49,7 @@ namespace OrderingFoodFinalTerm.Repository
 
         public bool ValidatePassword(User user, string password)
         {
-            
+
             return BCrypt.Net.BCrypt.Verify(password, user.Password);
         }
 
@@ -87,7 +88,7 @@ namespace OrderingFoodFinalTerm.Repository
                 Lastname = e.Lastname,
                 Phonenumber = e.Phonenumber,
                 Password = e.Password,
-                RoleId  = e.RoleId,
+                RoleId = e.RoleId,
 
             }).ToList();
             return users;
@@ -98,6 +99,18 @@ namespace OrderingFoodFinalTerm.Repository
             var user = _context.Users.SingleOrDefault(c => c.Id == id);
             _context.Users.Remove(user);
             _context.SaveChanges();
+        }
+
+        public List<User> Search(string key)
+        {
+            var users = _context.Users.AsQueryable();
+            if (key != null)
+            {
+                users = users.Where(c => c.Username.Contains(key));
+
+            }
+            return users.ToList();
+
         }
     }
 }

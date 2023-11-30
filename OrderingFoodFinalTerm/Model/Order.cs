@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace OrderingFoodFinalTerm
 {
@@ -14,6 +15,7 @@ namespace OrderingFoodFinalTerm
         public DateTime CreatedDate { get; set; }
         public int UserId { get; set; }
         public int Status { get; set; } // 0: pending, 1: confirmed, 2: is delivering, 3: delivered, 4: cancled
+        [JsonIgnore]
         public User User { get; set; }
    
     }

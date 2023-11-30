@@ -10,10 +10,7 @@ namespace OrderingFoodFinalTerm.Interface
 
         Cart getCartByUserId(int userId);
         void removeCartItem(int idCartItem);
-        void EditQuantityProduct(int cartProductId, int quantity);
+        void EditQuantityProduct(int cartId, int cartProductId, int quantity);
         void SaveChange();
-
-        
-
     }
 }

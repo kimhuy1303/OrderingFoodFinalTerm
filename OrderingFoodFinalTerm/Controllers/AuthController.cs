@@ -33,6 +33,8 @@ namespace OrderingFoodFinalTerm.Controllers
             {
                 Username = request.Username,
                 Password = hashPassword,
+                Phonenumber = request.Phonenumber
+
             };
             var result = _userRepository.CreateUser(newUser);
             if (!result)

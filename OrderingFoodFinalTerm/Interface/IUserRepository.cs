@@ -14,6 +14,7 @@
         string CreateToken(User user);
 
         void DeleteUser(int id);
+        List<User> Search(string key);
 
         //void ChangePassword(int id, string newPassword, string confirmPassword);
 

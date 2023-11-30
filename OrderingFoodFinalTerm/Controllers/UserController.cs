@@ -40,13 +40,13 @@ namespace OrderingFoodFinalTerm.Controllers
                 var res = _userRepository.GetUserById(id);
                 if(res == null)
                 {
-                    return CustomResult(HttpStatusCode.NotFound);
+                    return CustomResult("Không tìm thấy người dùng",HttpStatusCode.NotFound);
                 }
                 return CustomResult(res,HttpStatusCode.OK);
             }
-            catch
+            catch (Exception ex)
             {
-                return CustomResult(HttpStatusCode.InternalServerError);
+                return CustomResult(ex.Message,HttpStatusCode.InternalServerError);
             }
         }
 
@@ -60,6 +60,21 @@ namespace OrderingFoodFinalTerm.Controllers
             }catch
             {
                 return CustomResult(HttpStatusCode.InternalServerError);
+            }
+        }
+
+
+        [HttpGet("Search")]
+        public IActionResult Search(string? key)
+        {
+            try
+            {
+                var res = _userRepository.Search(key);
+                return Ok(res);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
