@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OrderingFoodFinalTerm.Interface;
 using OrderingFoodFinalTerm.Repository;
@@ -18,24 +19,9 @@ namespace OrderingFoodFinalTerm.Controllers
             
         }
 
-        [HttpPost]
-        public IActionResult CreateOrder(Order order)
-        {
-            try
-            {
-               _orderRepository.CreateOrder(order);
-                return Ok("Tạo mới đơn hàng thành công");
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
         [HttpGet("id")]
         public IActionResult OrderDetail(int orderId) 
         { 
-
             try
             {
                 var orderDetail =  _orderRepository.GetOrderByID(orderId);
@@ -48,6 +34,7 @@ namespace OrderingFoodFinalTerm.Controllers
         }
 
         [HttpGet]
+
         public IActionResult GetAllOrder()
         {
             try
@@ -59,7 +46,22 @@ namespace OrderingFoodFinalTerm.Controllers
             }
         }
 
-
-
+        [HttpGet("UserID")] 
+        public IActionResult GetOrderByUserId(int userId)
+        {
+            var order = _orderRepository.GetOrderByUserID(userId);
+            if (order == null)
+            {
+                return NotFound("Không tìm thấy đơn hàng");
+            }
+            try
+            {
+                return Ok(order);
+            } 
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
     }
 }

@@ -73,6 +73,29 @@ namespace OrderingFoodFinalTerm.Controllers
             return BadRequest();
         }
 
+        [HttpPost("Checkout")]
+        public IActionResult Checkout(int userId, OrderDTO request)
+        {
+            var cart = _cartRepository.getCartByUserId(userId);
+            if(request == null)
+            {
+                return BadRequest("Vui lòng nhập thông tin");
+            }
+            if(cart == null)
+            {
+                return NotFound("Không tìm thấy giỏ hàng");
+            }
+            try
+            {
+                _cartRepository.Checkout(userId, request);
+                return Ok("Checkout thành công");
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
+        }
         
     }
 

@@ -82,6 +82,36 @@ namespace OrderingFoodFinalTerm.Repository
             return cart;
         }
 
+        public void ClearCart(int cartId)
+        {
+            var cartItems = _context.CartItems.Where(c => c.CartId == cartId);
+            _context.CartItems.RemoveRange(cartItems);
+            _context.SaveChanges();
+        }
+
+        public void Checkout(int userId, OrderDTO order)
+        {
+            var cart = getCartByUserId(userId);
+            if (cart != null)
+            {
+                var _order = new Order
+                {
+                    CustomerName = order.CustomerName,
+                    CustomerPhone = order.CustomerPhone,
+                    CustomerAddress = order.CustomerAddress,
+                    TotalPrice = cart.CartItems.Sum(c => c.TotalPrice),
+                    Quantity = cart.CartItems.Sum(c => c.Quantity),
+                    CreatedDate = DateTime.Now,
+                    UserId = userId,
+                    Status = 0,
+                };
+                _context.Add(_order);
+                _context.SaveChanges();
+
+                ClearCart(cart.Id);
+            }
+        }
+
         public void removeCartItem(int idCartItem)
         {
             var cartItem = _context.CartItems.Find(idCartItem);

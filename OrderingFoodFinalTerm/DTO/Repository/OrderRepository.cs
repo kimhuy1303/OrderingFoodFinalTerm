@@ -20,12 +20,12 @@ namespace OrderingFoodFinalTerm.Repository
 
         public ICollection<Order> GetOrderByUserID(int userId)
         {
-            return null;
+            return _context.Orders.Where(c => c.UserId == userId).ToList(); 
         }
 
         public Order GetOrderByID(int Orderid)
         {
-            return null;
+            return _context.Orders.FirstOrDefault(c => c.Id == Orderid);
         }
         
 

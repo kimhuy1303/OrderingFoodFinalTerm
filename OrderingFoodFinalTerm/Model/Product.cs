@@ -17,7 +17,7 @@ namespace OrderingFoodFinalTerm
         public DateTime CreatedDate { get; set; }
         public Category Category { get; set; }
         public int CategoryId { get; set; }
-        public List<Order> Orders { get; set; }
+        //public List<Order> Orders { get; set; }
         [JsonIgnore]
         public List<Menu> Menus { get; set; }
         

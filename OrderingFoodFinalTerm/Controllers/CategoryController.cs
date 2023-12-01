@@ -55,9 +55,6 @@ namespace OrderingFoodFinalTerm.Controllers
 
         // update
         [HttpPut("{id}")]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(404)]
         public IActionResult Update(int id, [FromBody]CategoryDTO category)
         {
             if(category == null)
